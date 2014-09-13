@@ -7,6 +7,8 @@ g3, or game
 * [Feedback](#feedback)
 * [Ethercraft](#ethercraft)
   * [Base Node](#base-node)
+    * [Extend](#extend)
+    * [Moves](#moves)
   * [How to](#how-to)
   * [Message A](#message-a)
   * [Contract: Winderness](#contract-wilderness)
@@ -68,7 +70,7 @@ The node should allow players to move between states using a method similar to t
             contract.storage[ msg.data[0] ] += 1 
             contract.storage[ caller ] = returned
 
-Moves that return a `<message-hash>` that does not yet exist, do not update the users state.
+Moves that return a `<message-hash>` that does not yet exist, do not update the users state. These `<message-hashes>` are assumed to reside on the contract being called, and it is assumed that within the context of the called contract the users state is correctly pointing to said `<message-hash>` but no state change has occured within the original node. 
 
 ## How to
 
