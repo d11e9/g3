@@ -6,6 +6,7 @@ g3, or game
 * [Initial Concept](#initial-concept)
 * [Feedback](#feedback)
 * [Ethercraft](#ethercraft)
+  * [Base Node](#base-node)
   * [How to](#how-to)
   * [Message A](#message-a)
   * [Contract: Winderness](#contract-wilderness)
@@ -34,27 +35,40 @@ Having thereby just come across the concept of Nomic games, as described by the 
 
 Is a prototypicical implementation of the currently evolving idea of **g3**, the game, and considered to be the first implementation but by no means the last, let alone canonical.
 
+##Base node
+
 ![Diagram](https://raw.githubusercontent.com/d11e9/g3/master/g3-xmind.png)
 
 > The above diagram is a first draft of what a g3 node might look like, in terms of `contract state`. This is orthoganal to logic that this contract may or may not impliment otherwise. But it is assumed that the easiest way to modify/add-to a node is my providing a new contract to handle whatever the new action/move may be.
 
+### Extend
+
 The base node or genesis contract would implement an "extend" action, which would behave something like the contract body below written in pseudo-serpent for simplicity.
 
+    # param 0 "extend"
+    # param 1 <message-hash>
+    # param 2 <contract-address> (Optional)
     if msg.data[0] == "extend"
         msg_hash = msg.data[1]
         contract_add = msg.data[2]
         contract.storage[msg_hash] = contract_add
         return 0
 
-Obviously with a few more checks, as to the authenticity of the caller and whether anything is being overwitten etc. The node should allow players to move between states using a method similar to the contract below. Which takes a transaction (TX) with the following data attached: `<contract-address> <action>` where action will be forwarded to the called contract and the players state will be updated to that returned from the called contract ( if it exists ), and the contracts call count incremented.
+Obviously with a few more checks, as to the authenticity of the caller and whether anything is being overwitten etc.
+
+### Moves
+
+The node should allow players to move between states using a method similar to the contract below. Which takes a transaction (TX) with the following data attached: `<contract-address> <action>` where action will be forwarded to the called contract and the players state will be updated to that returned from the called contract ( if it exists ), and the contracts call count incremented.
     
-    # param 1 contract to call
+    # param 0 <contract-address> to call
+    # param 1 <action> to pass
     if contract.storage[msg.data[0]]
         returned = call( msg.data[0], [..params] )
         if contract.storage[ returned ] == msg.data[0]
             contract.storage[ msg.data[0] ] += 1 
             contract.storage[ caller ] = returned
-    
+
+Moves that return a `<message-hash>` that does not yet exist, do not update the users state.
 
 ## How to
 
