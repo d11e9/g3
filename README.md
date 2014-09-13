@@ -6,6 +6,7 @@ g3, or game
 * [Initial Concept](#initial-concept)
 * [Feedback](#feedback)
 * [Ethercraft](#ethercraft)
+  * [How to](#how-to)
   * [Message A](#message-a)
   * [Contract: Winderness](#contract-wilderness)
 
@@ -30,6 +31,10 @@ From [u/avsa on r/ethereum](http://www.reddit.com/r/ethereum/comments/2g4yke/g3_
 Having thereby just come across the concept of Nomic games, as described by the author in his [Initial Ruleset](http://legacy.earlham.edu/~peters/writing/nomic.htm) It seems as through the framework can be applied to **g3**. I'm still busy processing the implications of such a framework and what the initial ruleset would be under such a system.
 
 #Ethercraft
+
+Is a prototypicical implementation of the currently evolving idea of **g3**, the game, and considered to be the first implemnetation but by no means the last, let alone canonical.
+
+## How to
 
 To start you need a message hash and a contract. Creating a TX with the data: "extend" #contract-address.
 
