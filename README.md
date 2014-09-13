@@ -32,7 +32,11 @@ Having thereby just come across the concept of Nomic games, as described by the 
 
 #Ethercraft
 
-Is a prototypicical implementation of the currently evolving idea of **g3**, the game, and considered to be the first implemnetation but by no means the last, let alone canonical.
+Is a prototypicical implementation of the currently evolving idea of **g3**, the game, and considered to be the first implementation but by no means the last, let alone canonical.
+
+![Diagram](https://raw.githubusercontent.com/d11e9/g3/master/g3-xmind.png)
+
+> The above diagram is a first draft of what a g3 node might look like, in terms of `contract state`. This is orthoganal to logic that this contract may or may not impliment otherwise. But it is assumed that the easiest way to modify/add-to a node is my providing a new contract to handle whatever the new action/move may be.
 
 ## How to
 
