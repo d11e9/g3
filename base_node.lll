@@ -1,0 +1,82 @@
+{
+  ; Register Name (this is poc7 syntax for namereg, and is a noop in poc5/6)
+  [0] "g3:base_node"
+
+  ; Save creator
+  [['creator]] (caller)
+
+  ; Document startstate as storage address 1, but "start" is a noop value.
+  [['start]] "start"
+
+  (returnlll
+    {
+
+      ; when the action (param0) is "extend"
+      (when (= (calldataload (* 0 32)) "extend")
+        {
+          [['lastAction]] "extend"
+
+          ; Save the message hash (param 1) with the value of the contract address (param2)
+          [[(calldataload (* 1 32))]] (calldataload (* 2 32))
+          (return 0)
+        }
+      )
+
+      ; when the action (param0) is "action"
+      ; it must refer to an existing message_hash / state and contract
+      (when (= (calldataload (* 0 32)) "action")
+        {
+          [['lastAction]] "action"
+
+          ; Save the action_hash (param 1) with the value of the message_hash's contract_address
+          [[(calldataload (* 1 32))]] (calldataload (* 2 32))
+          (return 0)
+        }
+      )
+
+      ; when the action exists as a message_hash in this node
+      (when @@(calldataload (* 0 32))
+        {
+          [['lastAction]] "msg exists calling" ;; msg_hash = calldataload (* 0 32)
+          ['ca] @@(calldataload (* 0 32)) ;; contract_address @@msg_hash
+
+          [['action]] (calldataload (* 1 32)) ;; [action...]?
+
+          ;; contract_return = call( contract_address, [action..params])
+          ['retuned] "MMM2" ;;(call (- (gas) 100) @contractAddress 0 0 8 0 0)
+
+          ;; If the return state is a valid message then set the players state to it.
+          (when @@ @'returned 
+            {
+              [[(caller)]] @'returned
+            }
+          )
+
+          ; either way increment the contracts call count
+          [[10]] @'ca
+
+          (if @@ @'ca
+            {
+              [[@@ @'ca]] (+ 1 @@ @@ @'ca)
+            }
+            {
+              [[@@ @'ca]] 1
+            }
+          )
+
+          ;; If the player has no state then set to start state
+          (unless @@(caller)
+            {
+              [[(caller)]] @@'start
+            }
+          )
+
+          (return 0)
+        }
+      )
+
+      (return 0)
+
+    }
+  )
+}
